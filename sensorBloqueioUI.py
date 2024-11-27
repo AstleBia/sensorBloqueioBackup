@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-#from sistemaBloqueio import iniciar_sistema
+from sensor import main, read_arduino
 import time
 
 logo = './cesar.ico'
@@ -29,16 +29,16 @@ while True:
         window.close()
         layoutAtual = 'pagSistema'
         window = selecionarJanela(layoutAtual)
-        #if not sistemaInicializado:
-            #sistemaInicializado = True
-            #while sistemaInicializado:
-                #iniciar_sistema()
-                #time.sleep(1)
-                #print("ok")
+        arduino = main()
+        if arduino:
+            while True:
+                if not read_arduino(arduino):
+                    break
 
     if event == 'Parar' and layoutAtual == 'pagSistema':
         print("Parando")
-        #sistemaInicializado = False
+        if arduino:
+            arduino.close()
         window.close()
         layoutAtual = 'pagInicial'
         window = selecionarJanela(layoutAtual)
